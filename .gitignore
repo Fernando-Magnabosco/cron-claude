@@ -1,0 +1,15 @@
+# Keep the tooling; ignore private/generated content.
+logs/*
+plans/*
+tasks/*
+tasks/done/*
+
+# ...but keep the folder structure and docs.
+!logs/.gitkeep
+!plans/.gitkeep
+!tasks/.gitkeep
+!tasks/done/.gitkeep
+!tasks/README.md
+
+# Local-only config (may contain machine paths); ship an example instead.
+.config

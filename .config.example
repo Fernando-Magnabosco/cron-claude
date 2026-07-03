@@ -1,0 +1,22 @@
+# cron-claude configuration — copy to `.config` and edit.
+# Simple KEY=VALUE (no spaces around =). Lines starting with # are ignored.
+
+# Model to use for planning. e.g. opus, sonnet, claude-opus-4-8, claude-sonnet-5
+MODEL=opus
+
+# Reasoning effort: low | medium | high | xhigh | max
+EFFORT=high
+
+# Working directory Claude runs in (so it discovers the repo + CLAUDE.md).
+# A task file can override this with a first-line marker:  <!-- cwd: /path/to/repo -->
+PROJECT_DIR=$HOME
+
+# Per-task timeout in seconds (kills a hung planning run).
+PLAN_TIMEOUT=1200
+
+# Only run inside this overnight window (24h clock). Set ENFORCE_WINDOW=0 to disable.
+# Window is 6 PM .. 3 AM so the last run's ~5h quota window resets ~8 AM (arrival).
+# END=4 (exclusive) so the 03:00 run is still admitted; 04:00+ is blocked.
+ENFORCE_WINDOW=1
+WINDOW_START=18   # 6 PM
+WINDOW_END=4      # admit up to 03:xx, block from 04:00
