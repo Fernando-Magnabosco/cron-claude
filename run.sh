@@ -104,11 +104,17 @@ for task in "${TASKS[@]}"; do
   base="${name%.*}"
   out="$PLANS_DIR/${base}.plan-${STAMP}.md"
 
-  # per-task cwd override:  <!-- cwd: /path -->  on the first line
+  # per-task cwd override on the first line. Accepts, leniently:
+  #   <!-- cwd: /path -->   |   cwd: /path   |   cwd /path
+  # (paths may contain '-', so we capture the rest of the line and trim).
   cwd="$PROJECT_DIR"
   first="$(head -n1 "$task")"
-  if [[ "$first" =~ cwd:[[:space:]]*([^[:space:]-]+) ]]; then
-    cwd="${BASH_REMATCH[1]}"
+  if [[ "$first" == *cwd* ]]; then
+    cand="${first#*cwd}"      # drop everything up to & including 'cwd'
+    cand="${cand#:}"          # optional leading colon
+    cand="${cand%-->}"        # drop trailing HTML-comment close, if any
+    cand="$(echo "$cand" | xargs)"   # trim surrounding whitespace
+    [[ -n "$cand" && -d "$cand" ]] && cwd="$cand"
   fi
   [[ -d "$cwd" ]] || cwd="$HOME"
 
